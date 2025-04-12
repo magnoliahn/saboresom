@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>Sabor & Som</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="container">
+    <h1>Sabor & Som</h1>
+    <p>Escolha seu humor:</p>
+    <select id="moodSelect">
+      <option value="happy">Feliz</option>
+      <option value="relax">Relaxado</option>
+      <option value="focused">Focado</option>
+      <option value="romantic">Romântico</option>
+    </select>
+    <button onclick="buscarSugestoes()">Buscar</button>
+
+    <div id="resultado" class="resultado"></div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
