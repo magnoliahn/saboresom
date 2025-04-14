@@ -1,0 +1,180 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+
+/* Paleta baseada em tons que remetem a comida */
+:root {
+  --bg-primary: #fff8e7;        /* Fundo cremoso e suave */
+  --bg-secondary: #ffffff;      /* Fundo branco para containers */
+  --text-primary: #5D4037;      /* Marrom escuro para boa legibilidade */
+  --accent-color: #a05139;      /* Tom quente para destaques */
+  --accent-hover: #c95b39;      /* Versão um pouco mais escura para hover */
+  --shadow: rgba(0, 0, 0, 0.1);  /* Sombra leve */
+}
+
+/* Estilos globais utilizando a fonte Inter */
+body {
+  font-family: 'Inter', sans-serif;
+  margin: 0;
+  padding: 30px;
+  background: linear-gradient(to bottom right, #fff8e7, #ffe0b2);
+  color: var(--text-primary);
+  display: flex;
+  justify-content: center;
+  min-height: 100vh;
+}
+
+/* Container principal centralizado e espaçoso */
+.container {
+  max-width: 1000px;
+  width: 100%;
+  background-color: var(--bg-secondary);
+  border-radius: 12px;
+  box-shadow: 0 4px 12px var(--shadow);
+  padding: 40px;
+}
+
+/* Cabeçalho */
+header {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+h1 {
+  font-size: 2.3em;
+  margin-bottom: 10px;
+  color: var(--accent-color);
+}
+
+h2 {
+  font-size: 1.4em;
+  margin-bottom: 30px;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+  line-height: 1.3;
+}
+
+/* Formulário para escolher o humor */
+form {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+  margin-bottom: 40px;
+  padding: 20px;
+  background-color: var(--bg-secondary);
+  border: 1px solid var(--accent-color);
+  border-radius: 8px;
+}
+
+form label {
+  font-size: 1.1em;
+  font-weight: 600;
+}
+
+form select {
+  padding: 10px 15px;
+  font-size: 1em;
+  border: 1px solid var(--accent-color);
+  border-radius: 6px;
+  background-color: var(--bg-secondary);
+}
+
+form button {
+  padding: 10px 20px;
+  font-size: 1em;
+  border: none;
+  border-radius: 6px;
+  background-color: var(--accent-color);
+  color: #ffffff;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+form button:hover {
+  background-color: var(--accent-hover);
+}
+
+/* Seções de resultado ocupando mais espaço */
+.section {
+  background-color: var(--bg-secondary);
+  padding: 35px;
+  margin-bottom: 30px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px var(--shadow);
+}
+
+/* Playlist - diminui o tamanho do nome da música e enfatiza o link */
+/* O nome da música ficará em 1.2em, enquanto o link manterá estilo e ênfase */
+#playlist-section p {
+  font-size: 1.2em; /* Diminuído para dar mais ênfase ao link */
+  margin-bottom: 10px;
+}
+
+#playlist-section a {
+  font-size: 1.2em;
+  color: var(--accent-color);
+  /* Mantém o estilo de link com sublinhado */
+  text-decoration: underline;
+  font-weight: 600;
+  transition: color 0.3s ease, transform 0.2s ease;
+}
+
+#playlist-section a:hover {
+  color: var(--accent-hover);
+  transform: scale(1.03);
+}
+
+/* Estilização para drinks e snacks */
+#drink-section, #snack-section {
+  font-size: 1.1em;
+}
+
+/* Imagens maiores para melhor visualização */
+img {
+  max-width: 150px;
+  border-radius: 6px;
+  margin-top: 10px;
+}
+
+/* Dropdown para receita - inicialmente escondido */
+.recipe-dropdown {
+  margin-top: 15px;
+  border-top: 1px solid var(--accent-color);
+  padding-top: 10px;
+  display: none;
+}
+
+.dropdown-btn {
+  background-color: transparent;
+  border: none;
+  color: var(--accent-color);
+  font-size: 1em;
+  cursor: pointer;
+  padding: 5px;
+  text-decoration: underline;
+}
+
+/* Exibe a receita quando a classe "show" é adicionada */
+.recipe-dropdown.show {
+  display: block;
+}
+
+/* Links gerais com transição */
+a {
+  color: var(--accent-color);
+  text-decoration: none;
+  transition: text-decoration 0.3s ease;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+/* Responsividade para telas menores */
+@media (max-width: 600px) {
+  form {
+    flex-direction: column;
+    align-items: center;
+  }
+}

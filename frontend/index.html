@@ -1,25 +1,60 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
   <title>Sabor & Som</title>
-  <link rel="stylesheet" href="styles.css">
+  <!-- Referencia a folha de estilo que contém as regras modernas e minimalistas -->
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
+  <!-- Container centraliza e organiza o conteúdo com bordas e sombras suaves -->
   <div class="container">
-    <h1>Sabor & Som</h1>
-    <p>Escolha seu humor:</p>
-    <select id="moodSelect">
-      <option value="happy">Feliz</option>
-      <option value="relax">Relaxado</option>
-      <option value="focused">Focado</option>
-      <option value="romantic">Romântico</option>
-    </select>
-    <button onclick="buscarSugestoes()">Buscar</button>
+    <header>
+      <h1>Sabor & Som</h1>
+      <p>Descubra músicas, drinks e snacks – tudo feito especialmente para você</p>
+    </header>
+    
+    <main>
+      <!-- Formulário para o usuário escolher seu humor -->
+      <form id="mood-form">
+        <label for="mood-select">Qual seu "Mood" de hoje:</label>
+        <select id="mood-select" name="mood">
+          <option value="happy">Feliz</option>
+          <option value="sad">Triste</option>
+          <option value="relax">Relaxado</option>
+          <option value="angry">Bravo</option>
+          <option value="focused">Focado</option>
+          <option value="romantic">Romântico</option>
+          <option value="energetic">Enérgico</option>
+        </select>
+        <button type="submit">Ver Sugestões</button>
+      </form>
 
-    <div id="resultado" class="resultado"></div>
+      <!-- Seção de resultados -->
+      <section id="result">
+        <h2>Sugestões para o seu humor</h2>
+        
+        <!-- Bloco para exibir a playlist -->
+        <div class="section" id="playlist-section">
+          <h3>Playlist</h3>
+          <div id="playlist-result">Aguardando...</div>
+        </div>
+        
+        <!-- Bloco para exibir o drink -->
+        <div class="section" id="drink-section">
+          <h3>Drink</h3>
+          <div id="drink-result">Aguardando...</div>
+        </div>
+        
+        <!-- Bloco para exibir o snack -->
+        <div class="section" id="snack-section">
+          <h3>Snack</h3>
+          <div id="snack-result">Aguardando...</div>
+        </div>
+      </section>
+    </main>
   </div>
-
-  <script src="script.js"></script>
+  <!-- Script responsável por buscar e exibir as sugestões -->
+  <script src="app.js"></script>
 </body>
 </html>
