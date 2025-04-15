@@ -1,67 +1,102 @@
-// puxa o .env, importa o express, cors, e path
-require('dotenv').config();
+require('dotenv').config(); // carrega .env
+
+// importa os modulos: express para criar o servidor, cors para requisições de outros domínios e path para manipulação de caminhos de arquivos
 const express = require('express');
 const cors = require('cors');
 const path = require('path');
 
-// funcoes de servico que fazem chamada das apis
-const { getPlaylistByMood } = require('./services/playlistService');
+const { getPlaylistByMood } = require('./services/playlistService'); // funcoes de serviço para busca
 const { getDrinksByMood } = require('./services/drinkService');
 const { getSnacksByMood } = require('./services/snackService');
 
-const app = express(); // instancia do express para configurar o servidor 
+const app = express();
 const PORT = process.env.PORT || 3001;
 
-app.use(cors()); // habilita as requisições cross-origin
-app.use(express.json()); // permite que o servidor interprete o body das em json
+app.use(cors()); // ativa cors e interpreta json nas requisicoes
+app.use(express.json());
 
 app.use(express.static(path.join(__dirname, '../frontend'))); // configura o express para servir arquivos estaticos da pasta frontend
 
-app.get('/', (req, res) => { // renderiza o inde.html localizado na pasta frontend
+app.get('/', (req, res) => { // envia o arquivo index.html para o cliente
   res.sendFile('index.html', { root: path.join(__dirname, '../frontend') });
 });
 
-const getRandomItem = (array) => { //  recebe um array e retorna um item aleatorio
-  return array[Math.floor(Math.random() * array.length)];
-};
+// escolhe aleatoriamente um item de um array
+const getRandomItem = (array) => array[Math.floor(Math.random() * array.length)];
 
-// retorna uma musica (track) aleatoria com base no humor quando acessar "/api/playlist/:mood", a função getPlaylistByMood é chamada
-// e depois é selecionado um track aleatorio dentre os resultados (se houver algum) se nao houver, retorna null
 app.get('/api/playlist/:mood', async (req, res) => {
   try {
-    const { mood } = req.params;  // extrai o humor da url
-    const playlist = await getPlaylistByMood(mood); // chama a funcao que busca a playlist
-    const randomTrack = playlist.length > 0 ? getRandomItem(playlist) : null;
-    res.json({ playlist: randomTrack }); // retorna em json, com a propriedade "playlist" contendo o item selecionado.
-  } catch (error) {
+    const { mood } = req.params; // extrai o humor da URL
+    const playlist = await getPlaylistByMood(mood); // busca a playlist relacionada ao humor
+    const randomTrack = playlist.length > 0 ? getRandomItem(playlist) : null; // seleciona uma música aleatória
+    res.json({ 
+      playlist: randomTrack || { // se nao houver uma musica, retorna uma playlist padrao
+        name: "Música Relaxante", 
+        artist: "Artista Desconhecido", 
+        url: "https://www.last.fm/music" 
+      } 
+    });
+  } catch (error) { // se houver erro, retorna uma playlist padrao
     console.error(error);
-    res.status(500).json({ error: "Falha ao obter a playlist" });
+    res.json({ 
+      playlist: { 
+        name: "Música Relaxante", 
+        artist: "Artista Desconhecido", 
+        url: "https://www.last.fm/music" 
+      } 
+    });
   }
 });
 
-// retorna um drink aleatorio com base no humor chama getDrinksByMood e seleciona um drink aleatorio
 app.get('/api/drinks/:mood', async (req, res) => {
   try {
-    const { mood } = req.params; // extrai o humor da url
-    const drinks = await getDrinksByMood(mood); // busca os drinks com base no humor
-    const randomDrink = drinks.length > 0 ? getRandomItem(drinks) : null; // seleciona aleatoriamente um drink, se houver algum, caso contrário, retorna null
-    res.json({ drinks: randomDrink });
-  } catch (error) {
+    const { mood } = req.params; // extrai o humor da URL
+    const drinks = await getDrinksByMood(mood); // busca os drinks relacionados ao humor
+    const randomDrink = drinks.length > 0 ? getRandomItem(drinks) : null; // seleciona um drink aleatório
+    res.json({ 
+      drinks: randomDrink || { // se nao houver um drink, retorna um padrao
+        name: "Água com Limão",
+        image: "https://www.thecocktaildb.com/images/media/drink/xvwusr1472668546.jpg",
+        category: "Bebida Refrescante",
+        instructions: "Adicione fatias de limão à água gelada."
+      }
+    });
+  } catch (error) { // se houver erro retorna um drink padrao
     console.error(error);
-    res.status(500).json({ error: "Falha ao obter os drinks" });
+    res.json({ 
+      drinks: {
+        name: "Água com Limão",
+        image: "https://www.thecocktaildb.com/images/media/drink/xvwusr1472668546.jpg",
+        category: "Bebida Refrescante",
+        instructions: "Adicione fatias de limão à água gelada."
+      }
+    });
   }
 });
 
-// igual aos outros endpoints, chama a função getSnacksByMood e seleciona aleatoriamente um snack
 app.get('/api/snacks/:mood', async (req, res) => {
   try {
-    const { mood } = req.params;
-    const snacks = await getSnacksByMood(mood);
-    const randomSnack = snacks.length > 0 ? getRandomItem(snacks) : null;
-    res.json({ snacks: randomSnack });
-  } catch (error) {
+    const { mood } = req.params; // extrai o humor da URL
+    const snacks = await getSnacksByMood(mood); // busca os snacks relacionados ao humor
+    const randomSnack = snacks.length > 0 ? getRandomItem(snacks) : null; // seleciona um snack aleatório
+    res.json({ 
+      snacks: randomSnack || { // se nao houver um snack, retorna um padrao
+        name: "Mix de Frutas",
+        image: "https://www.themealdb.com/images/media/meals/wxywrq1468235067.jpg",
+        category: "Snack Saudável",
+        instructions: "Misture suas frutas favoritas em uma tigela."
+      }
+    });
+  } catch (error) { // se houver erro retorna um snack padrao
     console.error(error);
-    res.status(500).json({ error: "Falha ao obter os snacks" });
+    res.json({ 
+      snacks: {
+        name: "Mix de Frutas",
+        image: "https://www.themealdb.com/images/media/meals/wxywrq1468235067.jpg",
+        category: "Snack Saudável",
+        instructions: "Misture suas frutas favoritas em uma tigela."
+      }
+    });
   }
 });
 

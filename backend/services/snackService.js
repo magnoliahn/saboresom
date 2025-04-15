@@ -1,75 +1,50 @@
-// moodtosnackflavor e um objeto que mapeia humores para os sabores
+// mapeia cada humor para uma lista de snacks 
 const moodToSnackFlavor = {
-  happy: [
-    "cake",         // Doce, leve e comemorativo
-    "cupcake",      // Individual e atrativo
-    "brownie",      // Rico e indulgente
-    "macarons",     // Sofisticado e colorido
-    "cookies"       // Sempre uma opção clássica
-  ],
-  relax: [
-    "cookies",      // Confortável e caseiro
-    "muffin",       // Suave e reconfortante
-    "scone",        // Tradicional e leve
-    "biscotti",     // Combina com uma xícara de chá
-    "shortbread"    // Doce e delicado
-  ],
-  focused: [
-    "granola",      // Saudável e prática
-    "nuts",         // Energia concentrada e prática
-    "oatmeal",      // Leve e nutritivo
-    "energy ball",  // Combinado para concentração
-    "trail mix"     // Variante mista e energética
-  ],
-  romantic: [
-    "chocolate",    // Sofisticado e clássico
-    "truffle",      // Luxuoso e refinado
-    "macarons",     // Delicado e atraente
-    "strawberry tart", // Frutado e elegante
-    "fondue"        // Interativo e romântico
-  ],
-  sad: [
-    "ice cream",    // Confortante e gelado
-    "pudding",      // Suave e reconfortante
-    "cheesecake",   // Rico e indulgente
-    "warm cookie",  // Aconchegante e reconfortante
-    "brownie"       // Um doce para amenizar a melancolia
-  ],
-  angry: [
-    "spicy-nuts",       // Picante e marcante
-    "jalapeno chips",   // Intenso e ousado
-    "popcorn",          // Variante simples, mas que pode ser temperada
-    "hot wings",        // Para um gosto mais “explosivo” (se disponível)
-    "wasabi peas"       // Picante e inesperado
-  ],
-  energetic: [
-    "energy bar",       // Prático e funcional
-    "fruit salad",      // Leve e refrescante
-    "smoothie",         // Nutritivo e revigorante
-    "protein bar",      // Repleto de energia
-    "granola bar"       // Uma opção leve para sustentar a energia
-  ]
+  happy: ["Cheesecake", "Chocolate Cake", "Cupcake", "Apple Pie"], 
+  relax: ["Muffin", "Shortbread", "Scone", "Madeleine"],           
+  focused: ["Granola", "Oatmeal", "Energy Bar"],                     
+  romantic: ["Tiramisu", "Macarons", "Pavlova"],                     
+  sad: ["Ice Cream", "Brownie", "Creme Brulee"],                       
+  angry: ["Hot Wings", "Spicy Nuts", "Jalapeno Poppers"],            
+  energetic: ["Smoothie", "Protein Bar", "Fruit Salad"]              
 };
 
-
-async function getSnacksByMood(mood) {
+async function getSnacksByMood(mood) { // funcao assincrona para obter os snacks com base no humor
   try {
-    const snackFlavors = moodToSnackFlavor[mood] || ["cake"]; // se o humor de entrada nao existir no moodtosnackflavor 'cake' e usado como padrao
-    const snackFlavor = snackFlavors[Math.floor(Math.random() * snackFlavors.length)];
-
-    const url = `https://www.themealdb.com/api/json/v1/1/search.php?s=${snackFlavor}`; //url para acessar themealdb, pesquisa de acordo com o parametro s que é o sabor
+    const snackFlavors = moodToSnackFlavor[mood] || ["Cheesecake"]; // se o humor nao existir cheesecake é snack default
+    
+    const snackName = snackFlavors[Math.floor(Math.random() * snackFlavors.length)]; // escolhe um snack aleatorio da lista
+    
+    const url = `https://www.themealdb.com/api/json/v1/1/search.php?s=${encodeURIComponent(snackName)}`; // URL usa o parâmetro 's' para buscar pelo nome do snack na api
     const response = await fetch(url);
+    
     if (!response.ok) {
       throw new Error(`Erro ao acessar a API TheMealDB (status ${response.status})`);
     }
-    const data = await response.json(); // converte a res para json e armazena em data
-    const meals = data.meals || []; // se data.meals for null || [] garante que drinks seja sempre um array, evitando erros
-
-    // mapeia o drink para um objeto que contem so oq precisamos 
-    return meals.map(meal => ({
-      name: meal.strMeal,              
-      image: meal.strMealThumb,        
-      category: meal.strCategory,      
+    
+    // converte a resposta do api para json
+    const data = await response.json();
+    
+    if (!data.meals) {
+      // se a api nao encontrar um snack tenta buscar um  aleatorio usando o endpoint de receita aleatoria
+      const randomResponse = await fetch('https://www.themealdb.com/api/json/v1/1/random.php');
+      if (!randomResponse.ok) throw new Error('Erro na busca aleatória do snack');
+      const randomData = await randomResponse.json();
+      
+      // mapeia os dados retornados para usar somente o que precisamos
+      return randomData.meals.map(meal => ({
+        name: meal.strMeal,           
+        image: meal.strMealThumb,     
+        category: meal.strCategory,   
+        instructions: meal.strInstructions 
+      }));
+    }
+    
+    //  se a api encontrar um snack, mapeia os dados para o formato desejado
+    return data.meals.map(meal => ({
+      name: meal.strMeal,           
+      image: meal.strMealThumb,     
+      category: meal.strCategory,   
       instructions: meal.strInstructions 
     }));
   } catch (err) {
@@ -77,8 +52,8 @@ async function getSnacksByMood(mood) {
     throw err;
   }
 }
-  
-// exporta as funcoes para que possam ser usadas em outros modulos
+
+// exporta a funcao e o objeto para que possam ser usados em outros modulos
 module.exports = {
   getSnacksByMood,
   moodToSnackFlavor,
