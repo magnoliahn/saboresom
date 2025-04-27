@@ -17,7 +17,7 @@
 
 1. **Clone o repositório:**
 
-   git clone <URL_DO_REPOSITÓRIO>  
+   git clone <https://github.com/magnoliahn/saboresom.git>  
    cd saboresom
 
 2. **Instale as dependências:**
